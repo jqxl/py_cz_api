@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from config import app_name, app_version
+from py_cz_api.config import app_name, app_version
 
 setup(
     name=app_name,
