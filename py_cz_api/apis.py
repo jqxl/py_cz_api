@@ -3,6 +3,7 @@ import time
 import requests
 import asyncio
 import aiohttp
+import pandas
 
 from . import config
 from .classes import Pgs
@@ -29,9 +30,6 @@ class Api:
     def _url_pg(self) -> str:
         '''Возвращает ?pg="ТГ" для url запроса, где требуется указание pg в запросе'''
         return f'?pg={self.pg}' if self.pg else ''
-
-    def __repr__(self) -> str:
-        return f'Lib = cz_api Class = Api\stand: {self.stand}\npg: {self.pg}'
 
     def gtin_info(self, gtin_list:list) -> dict:    #TODO q = 1 000 split
         URL = '/product/info'
@@ -97,7 +95,9 @@ class Api:
     async def cises_info_aio(self, cis_list: list, pretty: bool = True) -> dict:
         '''Возвращает json ответ от ЧЗ по списку cis
         pretty: False [{'cisInfo':[cis:...]}, {'cisInfo':[cis:...]}]
-        pretty: True  [[cis:...]}, [cis:...], [cis:...],]'''
+        pretty: True  [[cis:...]}, [cis:...], [cis:...],]
+
+        :return: json ответ ЧЗ'''
 
         URL = '/cises/info'
         url = self.url_v3 + URL + self._url_pg
@@ -132,3 +132,51 @@ class Api:
             return [cis['cisInfo'] for cis in flattened_list]
         else:
             return flattened_list
+
+
+class ApiExtended(Api):
+    async def recursive_unpack(self, df:pandas.DataFrame, cis_col:str) -> pandas.DataFrame:
+        '''Добавляет колоку UNIT в DataFrame, содержащий марки штук продукции из вышестоящих марок
+
+        :param df: - входящий DataFrame
+        :param cis_col: - название стобца с марками для распаковки
+        :return: DataFrame с новой колонкой UNIT'''
+        df[cis_col] = df[cis_col].apply(lambda x: x.replace('(00)', '00', 1) if x.startswith('(00)') else x)
+        mark_list = df[cis_col].to_list()
+
+        ans = await self.cises_info_aio(mark_list)
+
+        requestedCiss = []
+        childs = []
+        requestedCiss_status = []
+
+        for a in ans:
+            requestedCiss.append(a['requestedCis'])
+            childs.append(a['child'])
+
+        df1 = pandas.DataFrame({cis_col:requestedCiss, 'UNIT':childs})
+        df2 = df1.explode('UNIT')
+        df2['UNIT'] = df2['UNIT'].fillna(df2[cis_col])
+        merge = df2.merge(df, on=cis_col, how='left', suffixes=('_merge', '_df'))
+
+        ### TODO рекурсивный метод распаковки до штук, далее опрос о статусе
+
+        mark_list = merge['UNIT'].to_list()
+        ans = await self.cises_info_aio(mark_list)
+
+        requestedCiss = []
+        childs = []
+        requestedCiss_status = []
+        requestedCiss_ownerInn = []
+        requestedCiss_ownerName = []
+
+
+        for a in ans:
+            requestedCiss.append(a['requestedCis'])
+            requestedCiss_status.append(a['status'])
+            requestedCiss_ownerInn.append(a['ownerInn'])
+            requestedCiss_ownerName.append(a['ownerName'])
+
+        df1 = pandas.DataFrame({'UNIT':requestedCiss, 'status':requestedCiss_status, 'ownerInn': requestedCiss_ownerInn,'ownerName': requestedCiss_ownerName})
+        merge2 = df1.merge(merge, on='UNIT', how='left', suffixes=('_merge', '_df'))
+        return merge2

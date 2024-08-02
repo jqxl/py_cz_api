@@ -14,6 +14,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'aiohttp',
+        'pandas',
         'pywin32',
         'PyJWT',
     ],
