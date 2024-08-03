@@ -6,9 +6,10 @@ import aiohttp
 import pandas
 
 from . import config
-from .classes import Pgs
-from .classes import URLStand
+from .classes import Pgs, URLStand
+from .classes import CisInfo
 from .tokens import Token
+from typing import List
 
 class Api:
     def __init__(self,
@@ -46,7 +47,7 @@ class Api:
         data = response.json()
         return data
 
-    def cises_info(self, cis_list: list, pretty: bool = True) -> dict:
+    def cises_info(self, cis_list: list, pretty: bool = True) -> List[CisInfo]: # TODO type-hinting CisInfo and pydentic validation
         '''Возвращает json ответ от ЧЗ по списку cis
         pretty: False [{'cisInfo':[cis:...]}, {'cisInfo':[cis:...]}]
         pretty: True  [[cis:...]}, [cis:...], [cis:...],]'''
