@@ -155,24 +155,46 @@ class Api:
         return data
 
     def doc_info(self,
-                 doc_id:str,
+                 documentId:str,
                  *,
                  body: bool = None,
                  content: bool = None,
                  limit: int = 36_000
                  ) -> dict:
         '''
-        Метод получения содержимого документа по
-        идентификатору
+        ###Метод получения содержимого документа по идентификатору
 
-        :param doc_id: ID документа, формируемый в ГИС МТ, или ИдФайл для УД
+        :param documentId: ID документа, формируемый в ГИС МТ, или ИдФайл для УД
         :param body: Признак необходимости в теле ответа содержимого документа
         :param content: Признак необходимости контента документа в теле ответа
         :param limit: Количество кодов в теле документе
         '''
         if body or content or limit: raise NotImplementedError('Не реализовано body, content и limit')
-        URL = f'/doc/{doc_id}/info'
+        URL = f'/doc/{documentId}/info'
         url = self.url_v4 + URL + self._url_pg
+        headers = {
+            'accept': '*/*',
+            "Authorization": 'Bearer ' + self.Token.value
+        }
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        return data
+
+    def doc_cises(self,
+                  documentId:str
+                  ) -> dict:
+        '''
+        ### Метод получения списка кодов идентификации и кодов товара по идентификатору документа
+        Метод используется для получения списка КИ и кодов товара по ID документа, обработанного
+        успешно или обработанного с ошибкой. В запросе может быть указан только один ID документа.
+        Метод не предназначен для запроса информации по УПД и УКД. Метод возвращает до 30000 КИ
+        (ограничение для документов прямой подачи 30000 КИ в одном документе), верхний уровень
+        агрегатов не возвращается.
+
+        :param documentId: ID документа, формируемый в ГИС МТ, или ИдФайл для УД
+        '''
+        URL = f'/doc/cises'
+        url = self.url_v3 + URL + '?documentId=' + documentId + '&productGroup=' + self.pg
         headers = {
             'accept': '*/*',
             "Authorization": 'Bearer ' + self.Token.value
