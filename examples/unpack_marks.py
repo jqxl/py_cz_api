@@ -16,5 +16,5 @@ mark_list = [
 cis_col = 'cis'
 df = pd.DataFrame({'cis': mark_list})
 
-df_unpacked = api.df_recursive_unpack(df, 'cis')
+df_unpacked = api.df_unpack(df, 'cis')
 print(df_unpacked)

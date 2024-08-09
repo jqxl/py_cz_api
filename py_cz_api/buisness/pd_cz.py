@@ -4,7 +4,7 @@ from py_cz_api.apis import Api
 
 class ApiExtended(Api):
     '''Расширенный функционал с бизнес логикой под конкретные задачи'''
-    def df_recursive_unpack(self,
+    def df_unpack(self,
                                df:pd.DataFrame,
                                cis_col:str) -> pd.DataFrame:
         '''Добавляет колоку UNIT в DataFrame, содержащий марки штук продукции из вышестоящих марок
