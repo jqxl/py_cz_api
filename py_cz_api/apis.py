@@ -133,3 +133,16 @@ class Api:
             return [cis['cisInfo'] for cis in flattened_list]
         else:
             return flattened_list
+
+    def cises_history(self, cis:str) -> dict:
+        ''''''
+        URL = '/cises/history'
+        url = self.url_v3 + URL + '?cis=' + cis
+        headers = {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + self.Token.value
+        }
+        response = requests.post(url, headers=headers)
+        data = response.json()
+        return data
