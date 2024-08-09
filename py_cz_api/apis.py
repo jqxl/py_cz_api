@@ -157,21 +157,24 @@ class Api:
     def doc_info(self,
                  documentId:str,
                  *,
-                 body: bool = None,
-                 content: bool = None,
+                 body: bool = False,
+                 content: bool = False,
                  limit: int = 36_000
                  ) -> dict:
         '''
-        ###Метод получения содержимого документа по идентификатору
+        ### Метод получения содержимого документа по идентификатору
 
         :param documentId: ID документа, формируемый в ГИС МТ, или ИдФайл для УД
         :param body: Признак необходимости в теле ответа содержимого документа
         :param content: Признак необходимости контента документа в теле ответа
         :param limit: Количество кодов в теле документе
         '''
-        if body or content or limit: raise NotImplementedError('Не реализовано body, content и limit')
+        _body = f'&{body=}'.lower()
+        _content = f'&{content=}'.lower()
+        _limit = f'&{limit=}'.lower()
         URL = f'/doc/{documentId}/info'
-        url = self.url_v4 + URL + self._url_pg
+        url = self.url_v4 + URL + self._url_pg + _body + _content
+        print(url)
         headers = {
             'accept': '*/*',
             "Authorization": 'Bearer ' + self.Token.value
