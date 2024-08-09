@@ -4,7 +4,7 @@ from py_cz_api.apis import Api
 
 class ApiExtended(Api):
     '''Расширенный функционал с бизнес логикой под конкретные задачи'''
-    async def recursive_unpack(self,
+    def df_recursive_unpack(self,
                                df:pd.DataFrame,
                                cis_col:str) -> pd.DataFrame:
         '''Добавляет колоку UNIT в DataFrame, содержащий марки штук продукции из вышестоящих марок
@@ -15,7 +15,7 @@ class ApiExtended(Api):
         df[cis_col] = df[cis_col].apply(lambda x: x.replace('(00)', '00', 1) if x.startswith('(00)') else x)
         mark_list = df[cis_col].to_list()
 
-        ans = await self.cises_info_aio(mark_list)
+        ans = self.cises_info(mark_list)
 
         requestedCiss = []
         childs = []
@@ -33,7 +33,7 @@ class ApiExtended(Api):
         ### TODO рекурсивный метод распаковки до штук, далее опрос о статусе
 
         mark_list = merge['UNIT'].to_list()
-        ans = await self.cises_info_aio(mark_list)
+        ans = self.cises_info(mark_list)
 
         requestedCiss = []
         childs = []
@@ -52,17 +52,18 @@ class ApiExtended(Api):
         merge2 = df1.merge(merge, on='UNIT', how='left', suffixes=('_merge', '_df'))
         return merge2
 
-    def cz_add_cis_info(self,
+    def df_add_cis_info(self,
                         df:pd.DataFrame,
                         cis_col:str,
-                        cisInfoCols:list = ['requestedCis',
-                                            'status',
-                                            'ownerInn',
-                                            'producerInn']
+                        cisInfoCols:list = ['status',
+                                            'ownerInn']
                         ) -> pd.DataFrame:
-        '''Добавляет в DataFrame столбцы из cises_info'''
-        ans = self.cises_info(df['mark_list'].to_list())
+        '''Добавляет в DataFrame столбцы из cisInfoCols'''
+        join_col = 'requestedCis'
+        cisInfoCols.append(join_col)
 
-        df_ans = pd.json_normalize(ans)[['requestedCis', 'status', 'ownerInn', 'producerInn']]
-        merged_df = df.merge(df_ans, left_on='mark_list', right_on='requestedCis', how='left', ).drop(columns=['requestedCis'])
+        ans = self.cises_info(df[cis_col].to_list())
+
+        df_ans = pd.json_normalize(ans)[cisInfoCols]
+        merged_df = df.merge(df_ans, left_on='mark_list', right_on=join_col, how='left', ).drop(columns=[join_col])
         return merged_df
