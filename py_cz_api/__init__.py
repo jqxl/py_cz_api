@@ -15,7 +15,7 @@ from .classes import Pgs
 from .certificates import Certificate
 from .tokens import Token
 from .apis import Api
-from .apis import ApiExtended
+from .buisness.pd_cz import ApiExtended
 
 def create_api_cert(serialnumber: str,
                pg: Pgs,
