@@ -33,5 +33,5 @@ class ApiExtended(Api):
         ans = self.cises_info(df[cis_col].to_list())
 
         df_ans = pd.json_normalize(ans)[cisInfoCols]
-        merged_df = df.merge(df_ans, left_on='mark_list', right_on=join_col, how='left', ).drop(columns=[join_col])
+        merged_df = df.merge(df_ans, left_on=cis_col, right_on=join_col, how='left').drop(columns=[join_col])
         return merged_df
