@@ -148,9 +148,35 @@ class Api:
         url = self.url_v3 + URL + '?cis=' + cis
         headers = {
             'accept': '*/*',
-            'Content-Type': 'application/json',
             "Authorization": 'Bearer ' + self.Token.value
         }
         response = requests.post(url, headers=headers)
+        data = response.json()
+        return data
+
+    def doc_info(self,
+                 doc_id:str,
+                 *,
+                 body: bool = None,
+                 content: bool = None,
+                 limit: int = 36_000
+                 ) -> dict:
+        '''
+        Метод получения содержимого документа по
+        идентификатору
+
+        :param doc_id: ID документа, формируемый в ГИС МТ, или ИдФайл для УД
+        :param body: Признак необходимости в теле ответа содержимого документа
+        :param content: Признак необходимости контента документа в теле ответа
+        :param limit: Количество кодов в теле документе
+        '''
+        if body or content or limit: raise NotImplementedError('Не реализовано body, content и limit')
+        URL = f'/doc/{doc_id}/info'
+        url = self.url_v4 + URL + self._url_pg
+        headers = {
+            'accept': '*/*',
+            "Authorization": 'Bearer ' + self.Token.value
+        }
+        response = requests.get(url, headers=headers)
         data = response.json()
         return data
