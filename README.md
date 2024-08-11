@@ -20,9 +20,9 @@ pip install aiohttp, pywin32, PyJWT
 ```
 
 ### Установка библиотеки
-Установить `py_cz_api` можно с помощью `pip` и ссылки:
+Установть `py_cz_api` можно с помощью менеджера пакетов [pip](https://pypi.org/project/py-cz-api/)
 ```bash
-pip install git+https://github.com/jqxl/py_cz_api.git
+pip install py-cz-api
 ```
 
 ### Инициализация классов и опрос ЧЗ о статусе марок:

@@ -10,3 +10,10 @@
 
 # Local test files
 _*.ipynb
+
+# PyPi publist files
+dist
+py_cz_api.egg-info
+_dist.cmd
+_twine.cmd
+pypi.token

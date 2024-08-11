@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from py_cz_api.config import app_name, app_version
 
 setup(
@@ -8,10 +8,11 @@ setup(
     long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/jqxl/py_cz_api',
+    download_url='https://codeload.github.com/jqxl/py_cz_api/zip/refs/heads/main',
     author='jqxl',
     author_email='jqxl+git@ya.ru',
-    license='MIT',
-    packages=find_packages(),
+    license='GNU General Public License v3.0',
+    packages=['py_cz_api'],
     install_requires=[
         'aiohttp',
         'pandas',
@@ -19,9 +20,7 @@ setup(
         'PyJWT',
     ],
     classifiers=[
-        'Programming Language :: Python :: 3',
-        'License :: OSI Approved :: MIT License',
-        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3'
     ],
     python_requires='>=3.10',
 )
