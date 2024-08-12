@@ -174,7 +174,6 @@ class Api:
         _limit = f'&{limit=}'.lower()
         URL = f'/doc/{documentId}/info'
         url = self.url_v4 + URL + self._url_pg + _body + _content
-        print(url)
         headers = {
             'accept': '*/*',
             "Authorization": 'Bearer ' + self.Token.value
