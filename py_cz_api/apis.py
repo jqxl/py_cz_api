@@ -204,3 +204,38 @@ class Api:
         response = requests.get(url, headers=headers)
         data = response.json()
         return data
+
+    def cises_short_list(self,
+                         mark_list:list):
+        '''
+        ## Метод получения общедоступной информации о КИ по списку (упрощённый атрибутивный состав)
+        Метод предназначен для отгрузки / приёмки товара всех товарных групп, используя информацию только из «cis» («Массив КИ»).
+
+        Из аналитического: есть `receiptDate` - дата вывода из оборота и `approvementDocument` номера разрешительной документации
+        '''
+        URL = '/cises/short/list'
+        url = self.url_v3 + URL# + self.pg
+        headers = {
+            'accept': '*/*',
+            'Content-Type': 'application/json',
+            "Authorization": 'Bearer ' + self.Token.value
+        }
+
+        datas = []
+        batch_size = 1000
+
+        cis_batches = [mark_list[i:i + batch_size] for i in range(0, len(mark_list), batch_size)]
+
+        for batch in cis_batches:
+            json_string = json.dumps(batch)
+            response = requests.post(url, headers=headers, data=json_string)
+            #return response
+            data = response.json()
+            datas.append(data)
+
+        flattened_list = [item for sublist in datas for item in sublist]
+
+        #if pretty:
+        #    return [cis['cisInfo'] for cis in flattened_list]
+        #else:
+        return flattened_list
