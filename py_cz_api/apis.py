@@ -241,3 +241,40 @@ class Api:
             return [cis['result'] for cis in flattened_list]
         else:
             return flattened_list
+
+    async def cises_short_list_aio(self, cis_list: list, pretty: bool = True) -> dict:
+            '''
+            ## Метод получения общедоступной информации о КИ по списку (упрощённый атрибутивный состав)
+            Метод предназначен для отгрузки / приёмки товара всех товарных групп, используя информацию только из «cis» («Массив КИ»).
+
+            Из аналитического: есть `receiptDate` - дата вывода из оборота и `approvementDocument` номера разрешительной документации
+            '''
+            URL = '/cises/short/list'
+            url = self.url_v3 + URL
+            headers = {
+                'accept': '*/*',
+                'Content-Type': 'application/json',
+                "Authorization": 'Bearer ' + self.Token.value
+            }
+
+            datas = []
+            batch_size = 1000
+
+            cis_list_chunks = [cis_list[i:i + batch_size] for i in range(0, len(cis_list), batch_size)]
+
+            async with aiohttp.ClientSession() as session:
+                tasks = []
+                for chunk in cis_list_chunks:
+                    json_string = json.dumps(chunk)
+                    task = self.fetch(session, url, headers, json_string)
+                    tasks.append(task)
+
+                responses = await asyncio.gather(*tasks)
+                datas.extend(responses)
+
+            flattened_list = [item for sublist in datas for item in sublist]
+
+            if pretty:
+                return [cis['result'] for cis in flattened_list]
+            else:
+                return flattened_list
