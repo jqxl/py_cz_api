@@ -206,7 +206,9 @@ class Api:
         return data
 
     def cises_short_list(self,
-                         mark_list:list):
+                         mark_list:list,
+                         pretty:bool=True
+                         ) -> dict:
         '''
         ## Метод получения общедоступной информации о КИ по списку (упрощённый атрибутивный состав)
         Метод предназначен для отгрузки / приёмки товара всех товарных групп, используя информацию только из «cis» («Массив КИ»).
@@ -235,7 +237,7 @@ class Api:
 
         flattened_list = [item for sublist in datas for item in sublist]
 
-        #if pretty:
-        #    return [cis['cisInfo'] for cis in flattened_list]
-        #else:
-        return flattened_list
+        if pretty:
+            return [cis['result'] for cis in flattened_list]
+        else:
+            return flattened_list
