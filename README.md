@@ -61,10 +61,10 @@ py_cz_api.show_certs()
 
 ## Реализованный список эндпоинтов:
 
-- `/product/info`
+- `/cises/short/list`
 - `/cises/info`
-- `/product/info`
 - `/cises/history`
+- `/product/info`
 - `/doc/{documentId}/info`
 - `/doc/cises`
 
