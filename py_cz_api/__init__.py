@@ -14,7 +14,7 @@ from .certificates import show_certs
 from .classes import Pgs
 from .certificates import Certificate
 from .tokens import Token
-from .apis import Api
+from .apis import Api, ApiDispenser
 from .buisness.pd_cz import ApiExtended
 
 def create_api_cert(serialnumber: str,

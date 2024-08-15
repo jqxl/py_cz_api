@@ -58,16 +58,24 @@ py_cz_api.show_certs()
 - `Certificate` - ЭЦП для шифрования данных
 - `Token` - авторизационный токен ЧЗ
 - `Api` - отправка запросов в ЧЗ
+- `ApiDispenser` - формирование и скачивание Документов выгрузки
+- `ApiExtended` - добавление стобцам pandas.DataFrame данные от `Api`
 
 ## Реализованный список эндпоинтов:
 
+### class: `Api`
 - `/cises/short/list`
 - `/cises/info`
 - `/cises/history`
 - `/product/info`
 - `/doc/{documentId}/info`
 - `/doc/cises`
+### class: `ApiDispenser`
+- `/dispenser/tasks`
+- `/dispenser/tasks/{taskId}`
+- `/dispenser/results/{taskId}`
+- `/dispenser/results/{taskId}/file`
 
 ## Дополнительная информация
 
-Для получения дополнительной информации и документации по использованию True API, пожалуйста, обратитесь к официальной документации True API версии 399.0.
+Для получения дополнительной информации и документации по использованию True API, пожалуйста, обратитесь к официальной документации True API версии 418.0.
