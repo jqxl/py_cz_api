@@ -44,3 +44,18 @@ class ApiExtended(Api):
         df = df[df['docId'].str.startswith('ON_NSCHFDOPPRMARK_2BM')]
         df.sort_values(by='operationDate', inplace=True)
         return df['docId'].iloc[0]
+
+    def df_add_cis_short_info(self,
+                        df:pd.DataFrame,
+                        cis_col:str,
+                        cisInfoCols:list = ['status',
+                                            'ownerInn',
+                                            'receiptDate']
+                        ) -> pd.DataFrame:
+        '''Добавляет в DataFrame столбцы из cisInfoCols'''
+        join_col = 'requestedCis'
+        cisInfoCols.append(join_col)
+        ans = self.cises_short_list(df[cis_col].to_list())
+        df_ans = pd.json_normalize(ans)[cisInfoCols]
+        merge = df.merge(df_ans, left_on=cis_col, right_on=join_col, how='left').drop(columns=[join_col])
+        return merge
