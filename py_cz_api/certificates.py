@@ -1,6 +1,11 @@
 from base64 import b64encode
-from win32com.client import Dispatch
 from datetime import datetime
+
+import sys
+if sys.platform == 'win32':
+    from win32com.client import Dispatch
+else:
+    Dispatch = None
 
 def show_certs() -> dict:
     '''Возвращает сертификаты вида {СерийныйНомер:Объект}'''
