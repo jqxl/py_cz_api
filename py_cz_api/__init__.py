@@ -10,24 +10,11 @@
 https://markirovka.crpt.ru/ -> Маркровка -> Товарная группа -> Помощь
 '''
 
+from .config import app_version as __version__
+
 from .certificates import show_certs
 from .classes import Pgs
 from .certificates import Certificate
 from .tokens import Token
 from .apis import Api, ApiDispenser
 from .buisness.pd_cz import ApiExtended
-
-def create_api_cert(serialnumber: str,
-               pg: Pgs,
-               product_env: bool = True) -> Api:
-    '''
-    Возвращает класс API для взаимодействия с ЧЗ\n
-    Посмотреть ЭП: `py_cz_api.show_cert()`\n
-    :param str serialnumbe: - Серийный номер ЭП
-    :param Pgs pg: - Основная товарная группа, прим: `Pgs.tabacco`
-    :param bool product_env: - Продуктовый контур
-    '''
-    certificate = Certificate(serialnumber)
-    token = Token.create_from_cert(certificate)
-    api = Api(Token=token,pg=pg, product_env=product_env)
-    return api

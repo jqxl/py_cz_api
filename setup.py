@@ -16,7 +16,6 @@ setup(
     install_requires=[
         'aiohttp',
         'pandas',
-        'pywin32',
         'PyJWT',
     ],
     classifiers=[

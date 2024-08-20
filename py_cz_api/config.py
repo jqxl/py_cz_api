@@ -1,7 +1,7 @@
 '''Конфиг библиотеки'''
 
 app_name = 'py_cz_api'
-app_version = '0.1.2'
+app_version = '0.2.0'
 app_string = f'Python lib: {app_name} v{app_version}'
 
 '''Количество запросов в секунду не должно превышать 50 от одного участника оборота
