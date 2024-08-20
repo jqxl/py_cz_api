@@ -1,6 +1,7 @@
 import json
 import requests
 
+from requests.auth import HTTPBasicAuth
 from datetime import datetime, timedelta
 from jwt import decode as jwt_decode
 
@@ -76,5 +77,12 @@ class Token:
         return Token(token)
 
     @staticmethod
-    def create_from_http(url:str) -> 'Token':
-        raise NotImplementedError
+    def create_from_http(url:str, username:str, password:str) -> 'Token':
+        auth = HTTPBasicAuth(username.encode('utf-8'), password.encode('utf-8'))
+        response = requests.get(url, auth=auth)
+        if response.status_code == 200:
+            token = Token(response.text)
+            token.token_validate()
+            return token
+        else:
+            raise ConnectionError(response, response.text)
