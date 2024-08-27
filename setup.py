@@ -17,7 +17,7 @@ setup(
         'aiohttp',
         'pandas',
         'PyJWT',
-    ],
+        'requests'],
     classifiers=[
         'Programming Language :: Python :: 3'
     ],

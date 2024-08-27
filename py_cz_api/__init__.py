@@ -14,7 +14,12 @@ from .config import app_version as __version__
 
 from .certificates import show_certs
 from .classes import Pgs
-from .certificates import Certificate
+
+try:
+    from .certificates import Certificate
+except Exception as e:
+    print('Cannot import Certificate: ' + str(e))
+
 from .tokens import Token
 from .apis import Api, ApiDispenser
 from .buisness.pd_cz import ApiExtended
