@@ -20,7 +20,7 @@ class ApiExtended(Api):
         if fillna: merge['child'] = merge['child'].fillna(merge[cis_col])
         return merge
 
-    async def df_unpack(self,
+    async def df_unpack_aio(self,
                  df:pd.DataFrame,
                  cis_col:str,
                  needs_explode:bool = True,

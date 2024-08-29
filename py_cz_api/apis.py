@@ -80,7 +80,8 @@ class Api:
         flattened_list = [item for sublist in datas for item in sublist]
 
         if pretty:
-            return [cis['cisInfo'] for cis in flattened_list]
+            return [cis['cisInfo'] for cis in flattened_list if 'cisInfo' in cis and cis['cisInfo']]
+            #return [cis['cisInfo'] for cis in flattened_list]
         else:
             return flattened_list
 
@@ -132,7 +133,7 @@ class Api:
         flattened_list = [item for sublist in datas for item in sublist]
 
         if pretty:
-            return [cis['cisInfo'] for cis in flattened_list]
+            return [cis['cisInfo'] for cis in flattened_list if 'cisInfo' in cis and cis['cisInfo']]
         else:
             return flattened_list
 
@@ -240,7 +241,8 @@ class Api:
         flattened_list = [item for sublist in datas for item in sublist]
 
         if pretty:
-            return [cis['result'] for cis in flattened_list]
+            return [cis['result'] for cis in flattened_list if 'result' in cis and cis['result']]
+            #eturn [cis['result'] for cis in flattened_list]
         else:
             return flattened_list
 
@@ -277,7 +279,8 @@ class Api:
             flattened_list = [item for sublist in datas for item in sublist]
 
             if pretty:
-                return [cis['result'] for cis in flattened_list]
+                return [cis['result'] for cis in flattened_list if 'result' in cis and cis['result']]
+                #return [cis['result'] for cis in flattened_list]
             else:
                 return flattened_list
 
