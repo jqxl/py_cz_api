@@ -20,6 +20,22 @@ class ApiExtended(Api):
         if fillna: merge['child'] = merge['child'].fillna(merge[cis_col])
         return merge
 
+    async def df_unpack(self,
+                 df:pd.DataFrame,
+                 cis_col:str,
+                 needs_explode:bool = True,
+                 fillna:bool = True) -> pd.DataFrame:
+        '''Добавляет колоку UNIT в DataFrame, содержащий марки штук продукции из вышестоящих марок
+
+        :param df: - входящий DataFrame
+        :param cis_col: - название стобца с марками для распаковки
+        :return: DataFrame с новой колонкой UNIT'''
+        ### TODO рекурсивный метод распаковки до штук
+        merge = await self.df_add_cis_info_aio(df, cis_col, cisInfoCols=['child'])
+        if needs_explode: merge = merge.explode('child')
+        if fillna: merge['child'] = merge['child'].fillna(merge[cis_col])
+        return merge
+
     def df_add_cis_info(self,
                         df:pd.DataFrame,
                         cis_col:str,
@@ -30,6 +46,20 @@ class ApiExtended(Api):
         join_col = 'requestedCis'
         cisInfoCols.append(join_col)
         ans = self.cises_info(df[cis_col].to_list())
+        df_ans = pd.json_normalize(ans)[cisInfoCols]
+        merge = df.merge(df_ans, left_on=cis_col, right_on=join_col, how='left').drop(columns=[join_col])
+        return merge
+
+    async def df_add_cis_info_aio(self,
+                        df:pd.DataFrame,
+                        cis_col:str,
+                        cisInfoCols:list = ['status',
+                                            'ownerInn']
+                        ) -> pd.DataFrame:
+        '''Добавляет в DataFrame столбцы из cisInfoCols'''
+        join_col = 'requestedCis'
+        cisInfoCols.append(join_col)
+        ans = await self.cises_info_aio(df[cis_col].to_list())
         df_ans = pd.json_normalize(ans)[cisInfoCols]
         merge = df.merge(df_ans, left_on=cis_col, right_on=join_col, how='left').drop(columns=[join_col])
         return merge
