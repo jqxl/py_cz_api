@@ -1,9 +1,8 @@
 from setuptools import setup
-from py_cz_api.config import app_name, app_version
 
 setup(
-    name=app_name,
-    version=app_version,
+    name='py_cz_api',
+    version='0.2.7',
     description='Библиотека для автоматизации работы с Честным Знаком через True API',
     long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
@@ -13,11 +12,8 @@ setup(
     author_email='jqxl+git@ya.ru',
     license='GNU General Public License v3.0',
     packages=['py_cz_api'],
-    install_requires=[
-        'aiohttp',
-        'pandas',
-        'PyJWT',
-        'requests'],
+    install_requires=install_requires,
+    include_package_data=True,
     classifiers=[
         'Programming Language :: Python :: 3'
     ],
