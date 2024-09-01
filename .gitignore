@@ -16,3 +16,6 @@ dist
 py_cz_api.egg-info
 _*.cmd
 _pypi.token
+
+# ignore xlsx
+**/*.xlsx
