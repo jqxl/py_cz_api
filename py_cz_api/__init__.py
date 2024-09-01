@@ -10,7 +10,7 @@
 https://markirovka.crpt.ru/ -> Маркровка -> Товарная группа -> Помощь
 '''
 
-from .config import app_version as __version__
+__version__ = '0.2.7'
 
 from .certificates import show_certs
 from .classes import Pgs
@@ -22,4 +22,4 @@ except Exception as e:
 
 from .tokens import Token
 from .apis import Api, ApiDispenser
-from .pd_cz import ApiExtended
+from .ApiExtended import ApiExtended

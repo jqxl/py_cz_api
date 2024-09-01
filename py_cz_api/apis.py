@@ -3,15 +3,12 @@ import time
 import requests
 import asyncio
 import aiohttp
-import pandas
 
-from . import config
-from .classes import Pgs, URLStand
-from .classes import CisInfo
+from .classes import CisStatus, EmissionTypes
+from .classes import Pgs, URLStand, CisInfo
+
 from .tokens import Token
 from typing import List, Optional
-
-from ._typing import CisStatus, EmissionTypes
 
 class Api:
     def __init__(self,
