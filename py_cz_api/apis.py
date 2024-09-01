@@ -1,3 +1,4 @@
+'''Модуль API, описывающий энд-поинты из документации True API'''
 import json
 import time
 import requests

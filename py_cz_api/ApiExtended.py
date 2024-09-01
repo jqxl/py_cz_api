@@ -1,5 +1,5 @@
+'''Бизнес автоматиция, работающая с Pandas'''
 import pandas as pd
-
 from py_cz_api.apis import Api
 
 class ApiExtended(Api):

@@ -1,5 +1,8 @@
+'''Модуль работы с Токеном авторазиации ЧЗ для доступа к API'''
 import json
 import requests
+
+from typing import Dict, Any
 
 from requests.auth import HTTPBasicAuth
 from datetime import datetime, timedelta
@@ -10,27 +13,26 @@ from .exceptions import TokenExpiredError
 
 
 class Token:
-    '''Интерфейс класса токен
-    Реализуй свои методы если хочешь получать токен
-    другими способами, отличные от работы с ЭЦП
-
-    Можно вытягивать токен из учётной системы типа 1С, SAP
-    через любые протоколы передачи данных
-
-    :param: `value` - само значение токена'''
-
+    '''Класс Токен - хранит в себе сам Токен и позволяет проверить его актуальность и расшифровать содержимое\n
+Можно вытягивать токен из учётной системы типа 1С, SAP через любые протоколы передачи данных'''
     value: str
-    jwt: json
+    jwt: Dict[str, Any]
     jwt_exp: timedelta
 
     def __init__(self, value:str):
-        self.value: str = value
-        self.jwt: json
-        self.jwt_exp: timedelta
+        '''### Чтобы создать класс `Token`, передай ему любым доступным способом значение Токена авторизации
+#### Либо получи его с помощью конструкторов:
+- `create_from_cert` с помощью ЭП и указания Серийного номера ЭП
+- `create_from_http` с помощью get запроса к учетной системе и базовой авторизации логином и паролем
 
+:param value: само значение токена'''
+        self.value: str = value
         self.token_validate()
 
-    def token_validate(self):
+    def token_validate(self) -> None:
+        '''Проверка жизни токена
+
+:raises TokenExpiredError: Если токен устарен'''
         if self.time_left.total_seconds() < 0:
             raise TokenExpiredError('JWT токен устарел, требуется перевыпустить токен')
 
@@ -55,7 +57,12 @@ class Token:
 
     @staticmethod
     def create_from_cert(Certificate: Certificate) -> 'Token':
-        '''Получить токен по сертфикату'''
+        '''Получить токен по сертфикату ЭП
+
+:param Certificate: Экземпляр класса, работающий с ЭП
+
+:return Token: Инициализированный класс `Token`'''
+
         url = 'https://markirovka.crpt.ru/api/v3/true-api/auth/key'
         headers = {'accept': 'application/json'}
 
@@ -78,6 +85,11 @@ class Token:
 
     @staticmethod
     def create_from_http(url:str, username:str, password:str) -> 'Token':
+        '''Отпавряет на указанный `URL` http get запрос на получение Token'а из учётной системы по типу 1C / SAP / Мой Склад\n
+По необходимости, перепишите функцию отправки и обработки полученного ответа самостоятельно\n
+*! Предварительно нужно настроить отдачу токена по `URL` в Вашей учётной системе !*
+
+:return Token: Инициализированный класс `Token`'''
         auth = HTTPBasicAuth(username.encode('utf-8'), password.encode('utf-8'))
         response = requests.get(url, auth=auth)
         if response.status_code == 200:

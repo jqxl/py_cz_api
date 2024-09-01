@@ -8,7 +8,9 @@ else:
     Dispatch = None
 
 def show_certs() -> dict:
-    '''Возвращает сертификаты вида {СерийныйНомер:Объект}'''
+    '''Выводит установленные сертификаты в хранилище
+
+:return dict: {СерийныйНомер:Объект}'''
     # 2 - Current User Store, 'My' - Personal Certificates, 2 - Read mode
     Store = Dispatch('CAdESCOM.Store')
     Store.Open(2, 'My', 2)
@@ -28,8 +30,13 @@ def _find_Cert(serialnumber: str):
 class Certificate:
     '''Класс с объектом сертификата ЭП, служащий для шифрования данных подписью'''
     def __init__(self, serialnumber: str):
-        '''Поддерживаются только сертификаты из личного хранилища
-        См. исходный код Store.Open(*, 'My', *)'''
+        '''### Требуется:
+- КриптоПро SCP
+- Установленный Сертификат в личное хранилище
+- Контейнер с записанными ключами шифрованиями
+
+:param serialnumber: Серийный номер ЭП. пример: `01EB1AA50033B12D894A535821B96C26C0`
+'''
         self.CertObj = _find_Cert(serialnumber)
         self.serialnumber = serialnumber.upper()
         self.owner = self.CertObj.SubjectName
