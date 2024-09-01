@@ -25,14 +25,7 @@ class Api:
         self.pg = pg
         self.url_v3, self.url_v4, self.stand = URLStand(product_env).get_urls()
         self.Token = Token
-        #self._semaphore = asyncio.Semaphore(50)  # Ограничение на 50 запросов в секунду
-        #self._rate_limit_lock = asyncio.Lock()
         self._last_request_time = 0
-
-    @property
-    def _url_pg(self) -> str:
-        '''Возвращает ?pg="ТГ" для url запроса, где требуется указание pg в запросе'''
-        return f'?pg={self.pg}' if self.pg else ''
 
     def gtin_info(self, gtin_list:list) -> dict:    #TODO q = 1 000 split
         URL = '/product/info'
@@ -55,7 +48,8 @@ class Api:
         pretty: True  [[cis:...]}, [cis:...], [cis:...],]'''
 
         URL = '/cises/info'
-        url = self.url_v3 + URL + self._url_pg
+        pg = self.pg
+        url = self.url_v3 + URL + f'?{pg=}'
         headers = {
             'accept': '*/*',
             'Content-Type': 'application/json',
@@ -104,7 +98,7 @@ class Api:
         :return: json ответ ЧЗ'''
 
         URL = '/cises/info'
-        url = self.url_v3 + URL + self._url_pg
+        url = self.url_v3 + URL + f'?pg={self.pg}'
         headers = {
             'accept': '*/*',
             'Content-Type': 'application/json',
@@ -176,7 +170,8 @@ class Api:
         _content = f'&{content=}'.lower()
         _limit = f'&{limit=}'.lower()
         URL = f'/doc/{documentId}/info'
-        url = self.url_v4 + URL + self._url_pg + _body + _content
+        pg = self.pg
+        url = self.url_v4 + URL + f'?{pg=}' + _body + _content
         headers = {
             'accept': '*/*',
             "Authorization": 'Bearer ' + self.Token.value
