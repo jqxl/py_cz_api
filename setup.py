@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='py_cz_api',
-    version='0.2.7',
+    version='0.3.0',
     description='Библиотека для автоматизации работы с Честным Знаком через True API',
     long_description=open('README.md', encoding='utf-8').read(),
     long_description_content_type='text/markdown',

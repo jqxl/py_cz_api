@@ -10,7 +10,7 @@
 https://markirovka.crpt.ru/ -> Маркровка -> Товарная группа -> Помощь
 '''
 
-__version__ = '0.2.7'
+__version__ = '0.3.0'
 
 from .certificates import show_certs
 from ._typing import Pgs
