@@ -4,8 +4,8 @@ import requests
 import asyncio
 import aiohttp
 
-from .classes import CisStatus, EmissionTypes
-from .classes import Pgs, URLStand, CisInfo
+from ._typing import CisStatus, EmissionTypes
+from ._typing import Pgs, URLStand, CisInfo
 
 from .tokens import Token
 from typing import List, Optional
