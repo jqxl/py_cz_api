@@ -1,6 +1,9 @@
 # Личный проект для автоматизации работы с Честным Знаком через True API
 
 ### **<ins>Только для ОС Windows с установленной КриптоПро SCP</ins>**
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py-cz-api.svg)](https://pypi.org/project/py-cz-api/)
+[![My PyPi bage](https://badge.fury.io/py/py-cz-api.svg)](https://badge.fury.io/py/py-cz-api)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/py-cz-api)](https://pypi.org/project/py-cz-api)
 
 ## Описание
 
