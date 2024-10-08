@@ -1,4 +1,5 @@
 # Личный проект для автоматизации работы с Честным Знаком через True API
+## Поддержка и разработка прекращена
 
 ### **<ins>Только для ОС Windows с установленной КриптоПро SCP</ins>**
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/py-cz-api.svg)](https://pypi.org/project/py-cz-api/)
